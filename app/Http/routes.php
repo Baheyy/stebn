@@ -30,3 +30,16 @@ Route::get('admin/welcome', 'AdminController@index');
 Route::get('admin/cards', 'AdminController@cards');
 
 Route::post('CreateCards', 'AdminController@CreateCards');
+
+Route::get('hotelreceptionist/welcome', 'HotelReceptionistController@index');
+
+Route::get('hotelreceptionist/viewCards', 'HotelReceptionistController@viewCards');
+
+Route::get('admin/bikes', 'AdminController@bikes');
+
+Route::post('CreateBikes', 'AdminController@CreateBikes');
+
+Route::get('admin/bikestations', 'AdminController@bikeStations');
+
+Route::post('CreateBikeStations', 'AdminController@CreateBikeStations');
+
