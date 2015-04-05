@@ -11,8 +11,6 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
-
 Route::get('welcome', 'WelcomeController@index');
 
 Route::get('authentication/register', 'AuthenticationController@register');
@@ -44,3 +42,5 @@ Route::get('admin/bikestations', 'AdminController@bikeStations');
 Route::post('CreateBikeStations', 'AdminController@CreateBikeStations');
 
 Route::get('admin/viewBikeStations', 'AdminController@viewBikeStations');
+
+Route::get('bikestations', 'UserController@bikeStations');
