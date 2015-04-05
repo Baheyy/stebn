@@ -79,6 +79,13 @@ class AdminController extends Controller {
     ]);
     }
 
+    public function viewBikeStations()
+    {
+        $user = Auth::User();
+        $bikeStations = BikeStation::all();
+        return view('admin.view.bikeStations', compact('user'), compact('bikeStations'));
+    }
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
