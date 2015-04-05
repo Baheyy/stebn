@@ -16,9 +16,14 @@
 @yield('bikes')
     <button class="btn btn-default">
         <a href="/admin/bikestations">Create Bike Stations</a></button>
-
+<h1></h1>
 @yield('bikestations')
 
+    <button class="btn btn-default">
+        <a href="/admin/viewBikeStations"> View Bike Stations</a>
+    </button>
+
+@yield('viewBikeStations')
 </div>
 
 @endsection

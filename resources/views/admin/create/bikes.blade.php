@@ -13,6 +13,11 @@
     </div>
 
     <div class = "form-group"">
+        {!! Form::label('bike_station_id', 'Bike Station ID:') !!}
+        {!! Form::text('bike_station_id', null, ['class' => 'form-control']) !!}
+    </div>
+
+    <div class = "form-group"">
         {!! Form::label('vendor', 'Vendor:') !!}
         {!! Form::text('vendor', null, ['class' => 'form-control']) !!}
     </div>
