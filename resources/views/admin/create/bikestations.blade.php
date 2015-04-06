@@ -6,7 +6,6 @@
 {!! Form::open(['url' => 'CreateBikeStations']) !!}
 
 <div class ="container">
-
     <div class = "form-group"">
     {!! Form::label('BatchSize', 'Batch size:') !!}
     {!! Form::text('BatchSize', null, ['class' => 'form-control']) !!}

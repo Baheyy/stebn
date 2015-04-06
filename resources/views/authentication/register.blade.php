@@ -2,7 +2,7 @@
 
 @section('register')
 
-{!! Form::open(['url' => 'register']) !!}
+    {!! Form::open(['url' => 'register']) !!}
 
 <div class ="container">
 

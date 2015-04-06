@@ -3,6 +3,7 @@
 
 <h1></h1>
 <h1></h1>
+
 {!! Form::open(['url' => 'CreateBikes']) !!}
 
 <div class ="container">

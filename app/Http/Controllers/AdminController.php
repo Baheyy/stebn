@@ -20,7 +20,7 @@ class AdminController extends Controller {
 	public function index()
 	{
         $user = Auth::User();
-		return view('admin.welcome', compact('user'));
+        return view('admin.welcome', compact('user'));
 	}
 
     public function cards()
@@ -77,6 +77,16 @@ class AdminController extends Controller {
         'flash_message' => 'Card(s) created successfully!',
         'flash_message_important' => true,
     ]);
+    }
+
+    public function UpdateMinTime()
+    {
+        $user = Auth::User();
+        return view('admin.update.minimumTime', compact('user'));
+    }
+    public function UpdateBikeTime(Requests\UpdateMinTime $request)
+    {
+
     }
 
 	/**

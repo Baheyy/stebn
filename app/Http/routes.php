@@ -27,7 +27,7 @@ Route::get('logout', 'AuthenticationController@Deauthenticate');
 
 Route::get('admin/welcome', 'AdminController@index');
 
-Route::get('admin/cards', 'AdminController@cards');
+Route::get('admin/cads', 'AdminController@cards');
 
 Route::post('CreateCards', 'AdminController@CreateCards');
 
@@ -42,4 +42,8 @@ Route::post('CreateBikes', 'AdminController@CreateBikes');
 Route::get('admin/bikestations', 'AdminController@bikeStations');
 
 Route::post('CreateBikeStations', 'AdminController@CreateBikeStations');
+
+Route::get('/admin/MinimumTime', 'AdminController@UpdateMinTime');
+
+Route::post('UpdateBikeTime', 'AdminController@UpdateMinTime');
 
