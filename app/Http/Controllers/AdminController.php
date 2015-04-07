@@ -86,6 +86,18 @@ class AdminController extends Controller {
         return view('admin.view.bikeStations', compact('user'), compact('bikeStations'));
     }
 
+    /**
+     * This method returns the bikes in a certain given station.
+     */
+    public function viewBikes(Requests\viewBikes $request)
+    {
+        $bikestation = BikeStation::find($request->bikeStations +1);
+        $bikes = $bikestation->bikes->toArray();
+        $user = Auth::User();
+
+        return view('admin.view.BikesInStation', compact('bikes'), compact('user'));
+    }
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
