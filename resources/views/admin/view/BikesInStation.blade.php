@@ -5,7 +5,7 @@
 
 <ul>
     <li>
-        {{$bike['type']}}
+       {{$bike['type']}}
     </li>
 </ul>
 

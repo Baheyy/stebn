@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Bike;
 use Auth;
+use App\Time;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -96,6 +98,35 @@ class AdminController extends Controller {
         $user = Auth::User();
 
         return view('admin.view.BikesInStation', compact('bikes'), compact('user'));
+    }
+
+
+    /**
+     * Views the update minimum time page.
+     * @return mixed
+     */
+    public function UpdateMinTime()
+    {
+        $user = Auth::User();
+        return view('admin.update.minimumTime', compact('user'));
+    }
+
+    /**
+     * Updates the minimum time attribute in table time.
+     *
+     */
+
+    public function UpdateBikeTime(Time $time,Requests\UpdateMinTime $request)
+    {
+        $x = $request->minimum_time;
+        DB::table('times')
+            ->where('id', 1)
+            ->update(['minimum_time' => $x]);
+
+        return redirect('admin/welcome')->with([
+            'flash_message' => 'Minimum time updated successfully!',
+            'flash_message_important' => true,
+        ]);
     }
 
 	/**

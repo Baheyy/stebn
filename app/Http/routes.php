@@ -46,3 +46,7 @@ Route::get('admin/viewBikeStations', 'AdminController@viewBikeStations');
 Route::get('bikestations', 'UserController@bikeStations');
 
 Route::post('viewBikeStations', 'AdminController@viewBikes');
+
+Route::get('/admin/updateMinTime', 'AdminController@UpdateMinTime');
+
+Route::post('UpdateBikeTime', 'AdminController@UpdateBikeTime');
