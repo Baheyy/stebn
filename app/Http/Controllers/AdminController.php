@@ -116,7 +116,7 @@ class AdminController extends Controller {
      *
      */
 
-    public function UpdateBikeTime(Time $time,Requests\UpdateMinTime $request)
+    public function UpdateBikeTime(Requests\UpdateMinTime $request)
     {
         $x = $request->minimum_time;
         DB::table('times')
@@ -128,6 +128,38 @@ class AdminController extends Controller {
             'flash_message_important' => true,
         ]);
     }
+
+    /**
+     * @return \Illuminate\View\View
+     * Returns the view responsible for updating table price.
+     */
+
+    public function updatePrice()
+    {
+        $user = Auth::User();
+        return view('admin.update.price', compact('user'));
+    }
+
+    /**
+     * @param Requests\updatePrice $request
+     * @return \Illuminate\Http\RedirectResponse
+     * Updates table price with the requested new price.
+     */
+
+
+    public function updateBikePrice(Requests\updatePrice $request)
+    {
+        $x = $request->price;
+        DB::table('prices')
+            ->where('id', 1)
+            ->update(['price' => $x]);
+
+        return redirect('admin/welcome')->with([
+            'flash_message' => 'Price updated successfully!',
+            'flash_message_important' => true,
+        ]);
+    }
+
 
 	/**
 	 * Show the form for creating a new resource.

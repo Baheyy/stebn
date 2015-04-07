@@ -30,6 +30,12 @@
         <a href="/admin/updateMinTime">Update Minimum Time</a></button>
 
 @yield('updateMinTime')
+
+<h1></h1>
+    <button class="btn btn-default">
+        <a href="/admin/updatePrice">Update Price</a></button>
+
+@yield('updatePrice')
 </div>
 
 @endsection
