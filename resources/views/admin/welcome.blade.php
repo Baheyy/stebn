@@ -25,6 +25,11 @@
 
 @yield('viewBikeStations')
 @yield('viewBikes')
+<h1></h1>
+    <button class="btn btn-default">
+        <a href="/admin/updateMinTime">Update Minimum Time</a></button>
+
+@yield('updateMinTime')
 </div>
 
 @endsection
