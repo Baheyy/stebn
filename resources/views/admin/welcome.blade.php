@@ -24,6 +24,7 @@
     </button>
 
 @yield('viewBikeStations')
+@yield('viewBikes')
 </div>
 
 @endsection

@@ -6,8 +6,8 @@
 <div class ="container">
 
 <div class = "form-group"">
-{!! Form::label('bikeStations', ' ') !!}
-{!! Form::select('bikeStations', $bikeStations->lists('location'), null, ['class' => 'form-control']) !!}
+    {!! Form::label('bikeStations', ' ') !!}
+    {!! Form::select('bikeStations', $bikeStations->lists('location'), null, ['class' => 'form-control']) !!}
 </div>
 
 <div class = "form-group">

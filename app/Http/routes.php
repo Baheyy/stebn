@@ -44,3 +44,5 @@ Route::post('CreateBikeStations', 'AdminController@CreateBikeStations');
 Route::get('admin/viewBikeStations', 'AdminController@viewBikeStations');
 
 Route::get('bikestations', 'UserController@bikeStations');
+
+Route::post('viewBikeStations', 'AdminController@viewBikes');
