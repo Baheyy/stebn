@@ -50,3 +50,7 @@ Route::post('viewBikeStations', 'AdminController@viewBikes');
 Route::get('/admin/updateMinTime', 'AdminController@UpdateMinTime');
 
 Route::post('UpdateBikeTime', 'AdminController@UpdateBikeTime');
+
+Route::get('/admin/updatePrice', 'AdminController@updatePrice');
+
+Route::post('updatePrice', 'AdminController@updateBikePrice');
