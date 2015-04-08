@@ -54,3 +54,11 @@ Route::post('UpdateBikeTime', 'AdminController@UpdateBikeTime');
 Route::get('/admin/updatePrice', 'AdminController@updatePrice');
 
 Route::post('updatePrice', 'AdminController@updateBikePrice');
+
+Route::get('Customer/welcome' ,'CustomerController@index');
+
+Route::get('Customer/RentABike','CustomerController@RentABike');
+
+Route::get('Customer/ViewRentedBikes','CustomerController@ViewRentedBikes');
+
+Route::post('RentABike', 'CustomerController@RentTheBike');

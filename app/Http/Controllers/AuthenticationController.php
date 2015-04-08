@@ -52,6 +52,12 @@ class AuthenticationController extends Controller {
         return view('authentication.login');
     }
 
+    /**
+     * @param CreateUser $request
+     * @return \Illuminate\Http\RedirectResponse
+     * Creates all different types of users.
+     */
+
     public function store(CreateUser $request)
     {
         $type = $request->type;
@@ -63,7 +69,7 @@ class AuthenticationController extends Controller {
         {
             case '1':   User::create($request->all());
 
-                return redirect('hotelreceptionist/welcome')->with([
+                return redirect('admin/welcome')->with([
                 'flash_message' => 'Administrator created successfully',
                 'flash_message_important' => true,
             ], compact($user));
@@ -85,7 +91,7 @@ class AuthenticationController extends Controller {
                         $card->delete();
 
 
-                return redirect('hotelreceptionist/welcome')->with([
+                return redirect('Customer/welcome')->with([
                     'flash_message' => 'User created with Card ID:' .$card->id,
                     'flash_message_important' => true,
                 ], compact($user));
@@ -115,7 +121,7 @@ class AuthenticationController extends Controller {
         {
             case '1': return view('admin.welcome', compact('user')); break;
             case '2': return view('hotelreceptionist.welcome', compact('user')); break;
-            default : return view('welcome'); break;
+            default : return view('Customer.welcome'); break;
         }
 
 
