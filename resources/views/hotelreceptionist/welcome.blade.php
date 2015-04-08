@@ -8,17 +8,25 @@
 
     <button class="btn btn-default">
         <a href="/authentication/register">Create A New Customer </a></button>
-<h5></h5>
+<h1></h1>
 
     @yield('register')
 
-<h5></h5>
+<h1></h1>
     <button class="btn btn-default">
         <a href="/hotelreceptionist/viewCards">View Cards </a></button>
 
     @yield('viewCards')
 
     <h1></h1>
+    <button class="btn btn-default">
+        <a href="/hotelreceptionist/viewCustomersData">View Customers' Financial Data</a></button>
+
+    @yield('viewCustomersData')
+
+    <h1></h1>
+
+    @yield('viewEachCustomerData')
 
 </div>
 @endsection

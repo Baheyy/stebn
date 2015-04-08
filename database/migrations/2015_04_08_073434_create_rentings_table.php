@@ -17,7 +17,9 @@ class CreateRentingsTable extends Migration {
             $table->increments('id');
             $table->integer('bike_station_id');
             $table->integer('bike_id');
-            $table->integer('card_id')->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+            $table->integer('card_id');
             $table->timestamps();
 
             $table->foreign('bike_station_id')->references('id')->on('bike_stations');

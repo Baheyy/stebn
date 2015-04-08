@@ -5,6 +5,8 @@
 <ul>
     <li>
         {{$bike['type']}}
+        <h5></h5>
+        {{$bikestation->location}}
     </li>
 </ul>
 @endforeach

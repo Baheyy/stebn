@@ -1,15 +1,15 @@
 @extends('Customer.welcome')
-@section('RentABike')
+@section('ParkABike')
 
 <h1></h1>
 <h1></h1>
-{!! Form::open(['url' => 'RentABike']) !!}
+{!! Form::open(['url' => 'ParkABike']) !!}
 
 <div class ="container">
 
 
 
-<div class = "form-group"">
+    <div class = "form-group"">
     {!! Form::label('bike_station_id', 'Bike Station ID:') !!}
     {!! Form::text('bike_station_id', null, ['class' => 'form-control']) !!}
 </div>
