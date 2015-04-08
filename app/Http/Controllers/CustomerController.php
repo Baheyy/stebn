@@ -78,7 +78,7 @@ class CustomerController extends Controller {
 
         Renting::create($request->all());
         return redirect('Customer/welcome')->with([
-            'flash_message' => 'Bike successfully chosen!',
+            'flash_message' => 'Bike successfully chosen at: ' .Carbon::now(),
             'flash_message_important' => true,
         ]);
     }
