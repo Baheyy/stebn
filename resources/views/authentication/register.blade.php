@@ -4,8 +4,6 @@
 
 {!! Form::open(['url' => 'register']) !!}
 
-{!! Form::hidden('card_id', $card_id)!!}
-
 <div class ="container">
 
     <div class = "form-group"">

@@ -61,8 +61,7 @@ class AuthenticationController extends Controller {
 
         switch($type)
         {
-            case '1':   $request->card_id = null;
-                        User::create($request->all());
+            case '1':   User::create($request->all());
 
                 return redirect('hotelreceptionist/welcome')->with([
                 'flash_message' => 'Administrator created successfully',
@@ -70,8 +69,7 @@ class AuthenticationController extends Controller {
             ], compact($user));
             break;
 
-            case '2':   $request->card_id = null;
-                        User::create($request->all());
+            case '2':   User::create($request->all());
 
                 return redirect('hotelreceptionist/welcome')->with([
                     'flash_message' => 'Hotel Receptionist created successfully',
@@ -79,10 +77,13 @@ class AuthenticationController extends Controller {
                 ], compact($user));
                 break;
 
-            case '0':   $request->card_id = $card_id;
+            case '0':  User::create($request->all());
+                       DB::table('users')
+                            ->where('email', $request->email)
+                            ->update(['card_id' => $card_id]);
                         //dd($request->card_id);
                         $card->delete();
-                        User::create($request->all());
+
 
                 return redirect('hotelreceptionist/welcome')->with([
                     'flash_message' => 'User created with Card ID:' .$card->id,
