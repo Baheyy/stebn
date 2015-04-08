@@ -4,6 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Renting extends Model {
 
-    protected $fillable = ['bike_station_id', 'bike_id'];
+    protected $fillable = ['bike_station_id', 'bike_id', 'card_id'];
 
 }

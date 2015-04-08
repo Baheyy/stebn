@@ -62,3 +62,15 @@ Route::get('Customer/RentABike','CustomerController@RentABike');
 Route::get('Customer/ViewRentedBikes','CustomerController@ViewRentedBikes');
 
 Route::post('RentABike', 'CustomerController@RentTheBike');
+
+Route::get('Customer/ParkABike','CustomerController@ParkABike');
+
+Route::post('ParkABike', 'CustomerController@ParkTheBike');
+
+Route::get('Customer/OutstandingPrice', 'CustomerController@viewOutstandingPrice');
+
+Route::get('Customer/OutstandingTime', 'CustomerController@viewOutstandingTime');
+
+Route::get('hotelreceptionist/viewCustomersData', 'HotelReceptionistController@viewCustomersData');
+
+Route::get('customers/{id}', 'HotelReceptionistController@viewEachCustomerData');
