@@ -44,6 +44,11 @@ class HotelReceptionistController extends Controller {
         return view('hotelreceptionist.viewCards', compact('cards'), compact('user'));
     }
 
+    /**
+     * @return \Illuminate\View\View
+     * Views all the customers who are associated with the location associated with the signed in hotel receptionist.
+     */
+
     public function viewCustomersData()
     {
         $user = Auth::User();
@@ -51,6 +56,12 @@ class HotelReceptionistController extends Controller {
         $customers = $customers->lists('card_id');
         return view('hotelreceptionist.viewCustomersData', compact('user'), compact('customers'));
     }
+
+    /**
+     * @param $card_id
+     * @return \Illuminate\View\View
+     * Views the financial data of a certain customer by their card_ids.
+     */
 
     public function viewEachCustomerData($card_id)
     {

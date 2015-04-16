@@ -21,7 +21,7 @@ Route::get('authentication/login', 'AuthenticationController@login');
 
 Route::post('login', 'AuthenticationController@authenticate');
 
-Route::get('logout', 'AuthenticationController@Deauthenticate');
+Route::get('authentication/logout', 'AuthenticationController@Deauthenticate');
 
 Route::get('admin/welcome', 'AdminController@index');
 
@@ -74,3 +74,8 @@ Route::get('Customer/OutstandingTime', 'CustomerController@viewOutstandingTime')
 Route::get('hotelreceptionist/viewCustomersData', 'HotelReceptionistController@viewCustomersData');
 
 Route::get('customers/{id}', 'HotelReceptionistController@viewEachCustomerData');
+
+Route::get('admin/totalOutstandingPayments', 'AdminController@totalOutstandingPayments');
+
+Route::get('admin/totalOutstandingTimes', 'AdminController@totalOutstandingTimes');
+

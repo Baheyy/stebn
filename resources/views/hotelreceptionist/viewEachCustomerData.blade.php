@@ -5,10 +5,10 @@
 </h4>
 <h1></h1>
 <h5>
-    <li>Outstanding Price: {{$outstandingPrice}}</li>
+    <li>Outstanding Price: EGP {{$outstandingPrice}}</li>
 </h5>
 <h1></h1>
 <h5>
-    <li>Outstanding Time: {{$outstandingTime}}</li>
+    <li>Outstanding Time: {{$outstandingTime}} Hours</li>
 </h5>
 @endsection
