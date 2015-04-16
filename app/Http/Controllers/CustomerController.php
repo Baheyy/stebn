@@ -25,7 +25,6 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         return view('Customer.welcome', compact('user'));
-
     }
 
     /**
@@ -40,7 +39,7 @@ class CustomerController extends Controller {
 
     /**
      * @return \Illuminate\View\View
-     *
+     * Returns all the bikes associated with the signed in user.
      */
 
     public function ViewRentedBikes(){
@@ -63,7 +62,7 @@ class CustomerController extends Controller {
         $bikestations = BikeStation::all();
         $bikes = Bike::all(); //Must be handles only to view the bikes in the current station not all stations.
 
-        return view('Customer/Create/RentABike', compact('user'));
+        return view('Customer/Create/RentABike', compact('user', 'bikes', 'bikestations'));
         /*return redirect('Customer/welcome')->with([
             'flash_message' => 'You have successfully rented the choosen bike!',
             'flash_message_important' => true,
@@ -78,17 +77,32 @@ class CustomerController extends Controller {
      */
     public function RentTheBike(Requests\Rent $request)
     {
-        //dd($request->card_id);
         $user = Auth::User();
-        $bike_id = $request->bike_id;
+        $renting = DB::table('rentings')->where('card_id', $request->card_id)->first();
+        if(is_null($renting))
+        {
+            $bike_id = $request->bike_id;
+            $bike_id++;
+            $bike_station_id = $request->bike_station_id;
+            $bike_station_id++;
 
-        DB::table('bikes')
-            ->where('id', $bike_id)
-            ->update(['bike_station_id' => -1]);
+            DB::table('bikes')
+                ->where('id', $bike_id)
+                ->update(['bike_station_id' => -1]);
 
-        $user->bikes()->attach($request->bike_id);
+            $user->bikes()->attach($request->bike_id);
 
-        Renting::create($request->all());
+            Renting::create($request->all());
+
+
+        DB::table('rentings')
+            ->where('card_id', $request->card_id)
+            ->update(['bike_id' => $bike_id]);
+
+        DB::table('rentings')
+            ->where('card_id', $request->card_id)
+            ->update(['bike_station_id' => $bike_station_id]);
+
 
         DB::table('rentings')
             ->where('card_id', $request->card_id)
@@ -99,17 +113,25 @@ class CustomerController extends Controller {
             'flash_message' => 'Bike successfully chosen at: ' .Carbon::now(),
             'flash_message_important' => true,
         ]);
+        }
+        else{
+            return redirect('Customer/welcome')->with([
+                'flash_message' => 'You can\'t rent more than one bike at a time.',
+                'flash_message_important' => true,
+            ]);
+        }
     }
 
     /**
      * Returns the view for parking the bike
-     *
      */
 
     public function ParkABike()
     {
         $user = Auth::User();
-        return view('Customer.Create.ParkABike', compact('user'));
+        $bikes = Bike::all();
+        $bikestations = BikeStation::all();
+        return view('Customer.Create.ParkABike', compact('user', 'bikes', 'bikestations'));
     }
 
     /**
@@ -118,8 +140,19 @@ class CustomerController extends Controller {
     public function ParkTheBike(Requests\Rent $request)
     {
         $bikestation_id = $request->bike_station_id;
+        $bikestation_id++;
         $bike_id = $request->bike_id;
-        $bike = Bike::find($bike_id);
+        $bike_id++;
+
+        $renting = DB::table('rentings')->where('card_id', $request->card_id)->where('bike_id', $bike_id)->first();
+        if(is_null($renting))
+        {
+            return redirect('Customer/ParkABike')->with([
+                'flash_message' => 'Please make sure that\'s the bike you rented.',
+                'flash_message_important' => true,
+            ]);
+        }
+        else{
 
         DB::table('bikes')
             ->where('id', $bike_id)
@@ -130,7 +163,6 @@ class CustomerController extends Controller {
             ->update(['end_time' => Carbon::now()]);
 
        $card_id = $request->card_id;
-       $renting = Renting::where('card_id', $card_id)->first();
 
        $strStart = $renting->start_time;
        $strEnd = $renting->end_time;
@@ -190,14 +222,15 @@ class CustomerController extends Controller {
             $userExists->save();
         }
 
-        $renting->delete();
+        DB::table('rentings')->where('card_id', $request->card_id)->Delete();
+
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully parked at: ' .Carbon::now(),
             'flash_message_important' => true,
         ]);
 
-
+        }
     }
 
     /**
@@ -208,13 +241,28 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         $outstandingPayment = OutstandingPayment::where('card_id', $user->card_id)->first();
+        if(is_null($outstandingPayment))
+            return redirect('Customer/welcome')->with([
+                'flash_message' => 'You have no outstanding payments.',
+                'flash_message_important' => true,
+            ]);
         return view('Customer.View.outstandingPrice', compact('user'), compact('outstandingPayment'));
     }
+
+    /**
+     * @return \Illuminate\View\View
+     * Views the total outstanding time by a specific customer, precisely the signed in user.
+     */
 
     public function viewOutstandingTime()
     {
         $user = Auth::User();
         $outstandingTime = OutstandingTime::where('card_id', $user->card_id)->first();
+        if(is_null($outstandingTime))
+            return redirect('Customer/welcome')->with([
+                'flash_message' => 'You have not used any bike yet.',
+                'flash_message_important' => true,
+            ]);
         return view('Customer.View.outstandingTime', compact('user'), compact('outstandingTime'));
     }
 
