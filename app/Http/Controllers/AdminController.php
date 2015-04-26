@@ -218,13 +218,14 @@ class AdminController extends Controller {
             $price->price = $request->price;
             $price->save();
         }
+        else{
         $x = $request->price;
         $oldPrice = Price::first()->id;
         //dd($x);
         DB::table('prices')
             ->where('id', $oldPrice)
             ->update(['price' => $x]);
-
+        }
         return redirect('admin/welcome')->with([
             'flash_message' => 'Price updated successfully!',
             'flash_message_important' => true,
