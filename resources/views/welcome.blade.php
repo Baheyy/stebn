@@ -43,6 +43,7 @@
 			<div class="content">
 				<div class="title">Stebn</div>
 				<div class="quote">{{ Inspiring::quote() }}</div>
+                @yield('bikeStations')
 			</div>
 		</div>
 	</body>
