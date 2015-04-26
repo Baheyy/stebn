@@ -104,6 +104,18 @@
         </a>
         </div>
         @yield('ParkABike')
+
+
+    <div id="buttons">
+        <a href="/Customer/ViewBikesInStation"><h6> View Bike Stations! </h6>
+
+            <div>
+                Gotta view'em all!
+            </div>
+        </a>
+    </div>
+
+@yield('viewBikeStations')
 <div id="buttons">
     <a href="/Customer/OutstandingPrice"> <h6> View outstanding price! </h6>
         <div>
@@ -124,9 +136,7 @@
     @yield('OutstandingTime')
 
 </div>
-
 </div>
-
 
 
 

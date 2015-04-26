@@ -241,6 +241,7 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         $outstandingPayment = OutstandingPayment::where('card_id', $user->card_id)->first();
+        $outstandingPayment = number_format($outstandingPayment->outstanding_price, 2);
         if(is_null($outstandingPayment))
             return redirect('Customer/welcome')->with([
                 'flash_message' => 'You have no outstanding payments.',
@@ -258,12 +259,29 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         $outstandingTime = OutstandingTime::where('card_id', $user->card_id)->first();
+        $outstandingTime = number_format($outstandingTime->outstanding_time, 2);
         if(is_null($outstandingTime))
             return redirect('Customer/welcome')->with([
                 'flash_message' => 'You have not used any bike yet.',
                 'flash_message_important' => true,
             ]);
         return view('Customer.View.outstandingTime', compact('user'), compact('outstandingTime'));
+    }
+
+    public function ViewBikesInStation()
+    {
+        $user = Auth::User();
+        $bikeStations = BikeStation::all();
+        return view('Customer.View.bikeStations', compact('user'), compact('bikeStations'));
+    }
+
+    public function viewBikes(Requests\viewBikes $request)
+    {
+        $bikestation = BikeStation::find($request->bikeStations +1);
+        $bikes = $bikestation->bikes->toArray();
+        $user = Auth::User();
+
+        return view('Customer.View.BikesInStation', compact('bikes'), compact('user'));
     }
 
 
