@@ -9,10 +9,12 @@ use App\Price;
 use App\Renting;
 use Auth;
 use App\Bike;
+use App\Process;
 use DB;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class CustomerController extends Controller {
 
@@ -60,7 +62,7 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         $bikestations = BikeStation::all();
-        $bikes = Bike::all(); //Must be handles only to view the bikes in the current station not all stations.
+        $bikes = Bike::all(); //Must be handled only to view the bikes in the current station not all stations.
 
         return view('Customer/Create/RentABike', compact('user', 'bikes', 'bikestations'));
         /*return redirect('Customer/welcome')->with([
@@ -108,6 +110,20 @@ class CustomerController extends Controller {
             ->where('card_id', $request->card_id)
             ->update(['start_time' => Carbon::now()]);
 
+
+        $process = Process::create([
+                'card_id'   => $user->card_id,
+            ]);
+
+        //$process = DB::table('processes')->where('card_id', $user->card_id)->last();
+        $process = Process::where('card_id', $user->card_id)->last();
+
+        $process->hotel = $user->location;
+        $process->bike_id = $request->bike_id;
+        $process->station_from = $request->bike_station_id;
+        $process->start_time = Carbon::now();
+
+        $process->save();
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully chosen at: ' .Carbon::now(),
@@ -224,6 +240,15 @@ class CustomerController extends Controller {
 
         DB::table('rentings')->where('card_id', $request->card_id)->Delete();
 
+        $user = Auth::User();
+        $process = DB::table('processes')->where('card_id', $user->card_id)->last();
+
+        $process->station_to = $request->bike_station_id;
+        $process->end_time = Carbon::now();
+        $process->time_consumed = $minutes;
+        $process->cost = $payment;
+
+        $process->save();
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully parked at: ' .Carbon::now(),
