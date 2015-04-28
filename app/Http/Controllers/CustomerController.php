@@ -9,10 +9,12 @@ use App\Price;
 use App\Renting;
 use Auth;
 use App\Bike;
+use App\Process;
 use DB;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class CustomerController extends Controller {
 
@@ -60,7 +62,7 @@ class CustomerController extends Controller {
     {
         $user = Auth::User();
         $bikestations = BikeStation::all();
-        $bikes = Bike::all(); //Must be handles only to view the bikes in the current station not all stations.
+        $bikes = Bike::all(); //Must be handled only to view the bikes in the current station not all stations.
 
         return view('Customer/Create/RentABike', compact('user', 'bikes', 'bikestations'));
         /*return redirect('Customer/welcome')->with([
@@ -109,6 +111,15 @@ class CustomerController extends Controller {
             ->update(['start_time' => Carbon::now()]);
 
 
+        $process = Process::create([
+                'card_id'           => $user->card_id,
+                'bike_id'           => $bike_id,
+                'station_from'      => $bike_station_id,
+                'hotel'             => $user->location,
+                'start_time'        => Carbon::now(),
+            ]);
+
+
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully chosen at: ' .Carbon::now(),
             'flash_message_important' => true,
@@ -139,12 +150,13 @@ class CustomerController extends Controller {
      */
     public function ParkTheBike(Requests\Rent $request)
     {
-        $bikestation_id = $request->bike_station_id;
-        $bikestation_id++;
+        $bike_station_id = $request->bike_station_id;
+        $bike_station_id++;
         $bike_id = $request->bike_id;
         $bike_id++;
 
         $renting = DB::table('rentings')->where('card_id', $request->card_id)->where('bike_id', $bike_id)->first();
+
         if(is_null($renting))
         {
             return redirect('Customer/ParkABike')->with([
@@ -156,7 +168,7 @@ class CustomerController extends Controller {
 
         DB::table('bikes')
             ->where('id', $bike_id)
-            ->update(['bike_station_id' => $bikestation_id]);
+            ->update(['bike_station_id' => $bike_station_id]);
 
         DB::table('rentings')
             ->where('card_id', $request->card_id)
@@ -186,7 +198,9 @@ class CustomerController extends Controller {
        $price = $price->price;
 
        $minutes = $minutes/60;
+       $minutes = number_format($minutes, 2);
        $payment = $price * $minutes;
+       $payment = number_format($payment, 2);
 
        //dd($payment);
 
@@ -224,6 +238,12 @@ class CustomerController extends Controller {
 
         DB::table('rentings')->where('card_id', $request->card_id)->Delete();
 
+        $user = Auth::User();
+
+        DB::table('processes')
+            ->where('card_id', $request->card_id)->where('bike_id', $bike_id)->where('time_consumed', null)
+            ->update(['station_to' => $bike_station_id, 'end_time' => Carbon::now(),
+                'time_consumed' => $minutes, 'cost' => $payment]);
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully parked at: ' .Carbon::now(),
