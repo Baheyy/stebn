@@ -112,18 +112,13 @@ class CustomerController extends Controller {
 
 
         $process = Process::create([
-                'card_id'   => $user->card_id,
+                'card_id'           => $user->card_id,
+                'bike_id'           => $bike_id,
+                'station_from'      => $bike_station_id,
+                'hotel'             => $user->location,
+                'start_time'        => Carbon::now(),
             ]);
 
-        //$process = DB::table('processes')->where('card_id', $user->card_id)->last();
-        $process = Process::where('card_id', $user->card_id)->last();
-
-        $process->hotel = $user->location;
-        $process->bike_id = $request->bike_id;
-        $process->station_from = $request->bike_station_id;
-        $process->start_time = Carbon::now();
-
-        $process->save();
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully chosen at: ' .Carbon::now(),
@@ -155,12 +150,13 @@ class CustomerController extends Controller {
      */
     public function ParkTheBike(Requests\Rent $request)
     {
-        $bikestation_id = $request->bike_station_id;
-        $bikestation_id++;
+        $bike_station_id = $request->bike_station_id;
+        $bike_station_id++;
         $bike_id = $request->bike_id;
         $bike_id++;
 
         $renting = DB::table('rentings')->where('card_id', $request->card_id)->where('bike_id', $bike_id)->first();
+
         if(is_null($renting))
         {
             return redirect('Customer/ParkABike')->with([
@@ -172,7 +168,7 @@ class CustomerController extends Controller {
 
         DB::table('bikes')
             ->where('id', $bike_id)
-            ->update(['bike_station_id' => $bikestation_id]);
+            ->update(['bike_station_id' => $bike_station_id]);
 
         DB::table('rentings')
             ->where('card_id', $request->card_id)
@@ -202,7 +198,9 @@ class CustomerController extends Controller {
        $price = $price->price;
 
        $minutes = $minutes/60;
+       $minutes = number_format($minutes, 2);
        $payment = $price * $minutes;
+       $payment = number_format($payment, 2);
 
        //dd($payment);
 
@@ -241,14 +239,11 @@ class CustomerController extends Controller {
         DB::table('rentings')->where('card_id', $request->card_id)->Delete();
 
         $user = Auth::User();
-        $process = DB::table('processes')->where('card_id', $user->card_id)->last();
 
-        $process->station_to = $request->bike_station_id;
-        $process->end_time = Carbon::now();
-        $process->time_consumed = $minutes;
-        $process->cost = $payment;
-
-        $process->save();
+        DB::table('processes')
+            ->where('card_id', $request->card_id)->where('bike_id', $bike_id)->where('time_consumed', null)
+            ->update(['station_to' => $bike_station_id, 'end_time' => Carbon::now(),
+                'time_consumed' => $minutes, 'cost' => $payment]);
 
         return redirect('Customer/welcome')->with([
             'flash_message' => 'Bike successfully parked at: ' .Carbon::now(),
