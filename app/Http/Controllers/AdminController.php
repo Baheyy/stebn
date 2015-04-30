@@ -14,6 +14,8 @@ use App\Time;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+//use Symfony\Component\Process\Process;
+use App\Process;
 
 class AdminController extends Controller {
 
@@ -284,6 +286,14 @@ class AdminController extends Controller {
         //dd(round($sum,2));
         //dd($sum);
         return view('admin.view.totalOutstandingTimes', compact('user'), compact('formattedNum'));
+    }
+
+    public function viewProcesses()
+    {
+        $processes = Process::all();
+        $user = Auth::User();
+
+        return view('admin.view.viewProcesses', compact('user', 'processes'));
     }
 	/**
 	 * Show the form for creating a new resource.

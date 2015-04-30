@@ -55,6 +55,11 @@
 
     @yield('totalOutstandingTimes')
 
+    <h1></h1>
+    <button class="btn btn-default">
+        <a href="/admin/viewProcesses">View Processes </a></button>
+
+    @yield('viewProcesses')
 
 </div>
 
