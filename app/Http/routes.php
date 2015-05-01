@@ -82,3 +82,23 @@ Route::get('admin/totalOutstandingTimes', 'AdminController@totalOutstandingTimes
 Route::get('Customer/ViewBikesInStation', 'CustomerController@ViewBikesInStation');
 
 Route::post('viewBikesInTheStation', 'CustomerController@viewBikes');
+
+Route::get('admin/viewProcesses', 'AdminController@viewProcesses');
+
+Route::get('Customer/viewCustomerProcesses', 'CustomerController@viewCustomerProcesses');
+
+Route::get('hotelreceptionist/viewHotelProcesses', 'HotelReceptionistController@viewHotelProcesses');
+
+Route::get('admin/viewBikeStationFinance', 'AdminController@viewBikeStationFinance');
+
+Route::post('viewBikeStationFinance', 'AdminController@viewEachBikeStationFinance');
+
+Route::get('hotelManager/welcome', 'HotelManagerController@index');
+
+Route::get('hotelManager/registerReceptionist', 'HotelManagerController@registerReceptionist');
+
+Route::post('registerReceptionist', 'HotelManagerController@registerTheReceptionist');
+
+Route::get('admin/registerManager', 'AdminController@registerManager');
+
+Route::post('registerManager', 'AdminController@registerTheManager');

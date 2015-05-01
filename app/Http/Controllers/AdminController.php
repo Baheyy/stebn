@@ -14,6 +14,8 @@ use App\Time;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+//use Symfony\Component\Process\Process;
+use App\Process;
 
 class AdminController extends Controller {
 
@@ -234,56 +236,118 @@ class AdminController extends Controller {
 
     /**
      * @return \Illuminate\View\View
-     * Returns the total outstanding payments by all users.
+     * Views all the processes done by all the users in a table layout.
      */
 
-    public function totalOutstandingPayments()
+    public function viewProcesses()
+    {
+        $processes = Process::all();
+        $user = Auth::User();
+
+        $totalPayments = OutstandingPayment::all();
+        $sum = 0;
+        foreach($totalPayments as $totalPayment)
+        {
+            $sum = $totalPayment->outstanding_price + $sum;
+        }
+
+        $totalPayments = number_format($sum, 2);
+
+        $totalTimes = OutstandingTime::all();
+        $sum = 0;
+        foreach($totalTimes as $totalTime)
+        {
+            $sum = $totalTime->outstanding_time + $sum;
+        }
+
+        $totalTimes = number_format($sum, 2);
+
+        return view('admin.view.viewProcesses', compact('user', 'processes', 'totalPayments', 'totalTimes'));
+    }
+
+    /**
+     * Views the bikes in a drop down list in order to view them later
+     */
+    public function viewBikeStationFinance()
     {
         $user = Auth::User();
-        if(is_null(OutstandingPayment::all())){
-            $sum = 0;
-        }
-        else{
-                $totalPayments = OutstandingPayment::all();
-                $sum = 0;
-                foreach($totalPayments as $totalPayment)
-                {
-                    $sum = $totalPayment->outstanding_price + $sum;
-                }
+        $bikeStations = BikeStation::all();
+        return view('admin.view.viewBikeStationFinance', compact('user'), compact('bikeStations'));
+    }
 
-                $formattedNum = number_format($sum, 2);
-                //dd($sum);
+    /**
+     * Views the financial data of a certain bike station
+     */
+    public function viewEachBikeStationFinance(Requests\viewBikes $request)
+    {
+        $user = Auth::User();
+        $bike_station = $request->bikeStations;
+        $bike_station++;
+        $bike_station = BikeStation::find($bike_station);
+
+        $processes = Process::where('station_from', $bike_station->location)->get();
+
+        $totalPayments = OutstandingPayment::all();
+
+        $sum = 0;
+
+        foreach($totalPayments as $totalPayment)
+        {
+            $card_id = $totalPayment->card_id;
+            $customer = User::where('card_id', $card_id)->first();
+
+            if($customer->location == $bike_station->location)
+                $sum += $totalPayment->outstanding_price;
         }
-        return view('admin.view.totalOutstandingPayments', compact('user'), compact('formattedNum'));
+
+        $total = 0;
+        $totalTimes = OutstandingTime::all();
+        foreach($totalTimes as $totalTime)
+        {
+            $card_id = $totalTime->card_id;
+            $customer = User::where('card_id', $card_id)->first();
+            if($customer->location == $bike_station->location)
+                $total += $totalTime->outstanding_time  ;
+        }
+
+        $totalPayments = number_format($sum, 2);
+        $totalTimes = number_format($total, 2);
+
+        return view('admin.view.viewEachBikeStationFinance', compact('user', 'processes', 'totalPayments', 'totalTimes'));
     }
 
     /**
      * @return \Illuminate\View\View
-     * returns the total outstanding time consumed by all customers.
+     * Returns the view to register a manager by the admin.
      */
-
-    public function totalOutstandingTimes()
+    public function registerManager()
     {
         $user = Auth::User();
-        if(is_null(OutstandingTime::all()))
-        {
-            $sum = 0;
-        }
-        else{
-            $totalTimes = OutstandingTime::all();
-            $sum = 0;
-            foreach($totalTimes as $totalTime)
-            {
-                $sum = $totalTime->outstanding_time + $sum;
-            }
+        $bikeStations = BikeStation::all();
+        $bikeStations = $bikeStations->lists('location');
 
-            $formattedNum = number_format($sum, 2);
-            //dd($formattedNum);
-        }
+        return view('admin.create.registerManager', compact('user', 'bikeStations'));
+    }
 
-        //dd(round($sum,2));
-        //dd($sum);
-        return view('admin.view.totalOutstandingTimes', compact('user'), compact('formattedNum'));
+    /**
+     * Registers and stores the manager.
+     */
+    public function registerTheManager(Requests\CreateUser $request)
+    {
+        $user = Auth::User();
+        $manager = User::create($request->all());
+        $manager->type = 3;
+        $location = $request->location;
+        $location++;
+        $location = BikeStation::find($location);
+        $location = $location->location; //Hahahaha
+        $manager->location = $location;
+        $manager->save();
+
+        return redirect('admin/welcome')->with([
+            'flash_message' => 'Hotel Manager created successfully',
+            'flash_message_important' => true,
+        ], compact($user));
     }
 	/**
 	 * Show the form for creating a new resource.
