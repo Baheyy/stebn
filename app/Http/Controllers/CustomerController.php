@@ -7,6 +7,7 @@ use App\OutstandingPayment;
 use App\OutstandingTime;
 use App\Price;
 use App\Renting;
+use App\Report;
 use Auth;
 use App\Bike;
 use App\Process;
@@ -324,6 +325,30 @@ class CustomerController extends Controller {
         return view('Customer.View.viewCustomerProcesses', compact('user', 'processes', 'totalPayments', 'totalTimes'));
     }
 
+    /**
+     * @return \Illuminate\View\View
+     * Opens a new form to report a problem that occured to the customer.
+     */
+    public function report()
+    {
+        $user = Auth::User();
+        return view('Customer.View.report', compact('user'));
+    }
+
+    /**
+     * Stores the report in table reports.
+     */
+
+    public function storeReport(Requests\CreateReport $request)
+    {
+        $user = Auth::User();
+        Report::create($request->all());
+
+        return redirect('Customer/welcome')->with([
+            'flash_message' => 'You have successfully reported the problem. We will get back to you once we can!',
+            'flash_message_important' => true,
+        ]);
+    }
 
     public function store()
     {

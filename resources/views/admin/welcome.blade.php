@@ -76,7 +76,13 @@
 
     @yield('viewBikeStationFinance')
 
+<h1></h1>
+    <button class="btn btn-default">
+        <a href="/admin/viewReports">View Reported Problems</a></button>
 
+    @yield('viewReports')
+
+    <h1></h1>
 </div>
 
 @endsection

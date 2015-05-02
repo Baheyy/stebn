@@ -102,3 +102,9 @@ Route::post('registerReceptionist', 'HotelManagerController@registerTheReception
 Route::get('admin/registerManager', 'AdminController@registerManager');
 
 Route::post('registerManager', 'AdminController@registerTheManager');
+
+Route::get('Customer/report', 'CustomerController@report');
+
+Route::post('report', 'CustomerController@storeReport');
+
+Route::get('admin/viewReports', 'AdminController@viewReports');

@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\OutstandingPayment;
 use App\OutstandingTime;
+use App\Report;
 use App\User;
 use App\Bike;
 use Auth;
@@ -348,6 +349,20 @@ class AdminController extends Controller {
             'flash_message' => 'Hotel Manager created successfully',
             'flash_message_important' => true,
         ], compact($user));
+    }
+
+    public function viewReports()
+    {
+        $user = Auth::User();
+        $reports = Report::all();
+        if(is_null($reports))
+        {
+            return redirect('admin/welcome')->with([
+                'flash_message' => 'You do not have any reports at the moment',
+                'flash_message_important' => true,
+            ], compact($user));
+        }
+        return view('admin.view.viewReports', compact('user', 'reports'));
     }
 	/**
 	 * Show the form for creating a new resource.

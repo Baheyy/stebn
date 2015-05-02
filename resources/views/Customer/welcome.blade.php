@@ -143,6 +143,16 @@
         </a>
     </div>
     @yield('viewCustomerProcesses')
+
+    <div id="buttons">
+        <a href="/Customer/report"><h6> Report A Problem! </h6>
+
+            <div>
+                Oops! What went wrong, bruh?
+            </div>
+        </a>
+    </div>
+    @yield('report')
 </div>
 </div>
 
